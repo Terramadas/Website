@@ -246,6 +246,9 @@ _W.setup_model_rpc({"rpc_namespace":"_W.CustomerAccounts.RPC","model_namespace":
 .tm-news button { height: 40px; padding: 0 20px; border: 0; border-radius: 4px; background: #000; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
 .tm-news button:hover { background: #333; }
 .tm-news .tm-note { margin: 12px 0 0; font-size: 12px; line-height: 16px; color: #666; }
+.tm-news .tm-consent { flex: 1 0 100%; display: flex; gap: 8px; align-items: flex-start; margin: 4px 0; font-size: 12px; line-height: 18px; color: #000; }
+.tm-news .tm-consent input { margin-top: 3px; flex: none; }
+.tm-news a { color: #000; text-decoration: underline; }
 </style>
 <div class="tm-news">
   <h4>Terramadas newsletter</h4>
@@ -254,18 +257,19 @@ _W.setup_model_rpc({"rpc_namespace":"_W.CustomerAccounts.RPC","model_namespace":
     <input type="email" name="fields[email]" placeholder="Email" aria-label="Email" autocomplete="email" required>
     <input type="hidden" name="ml-submit" value="1">
     <input type="hidden" name="anticsrf" value="true">
+    <label class="tm-consent"><input type="checkbox" required><span>Opt in to receive news and updates.</span></label>
     <button type="submit">Subscribe</button>
   </form>
-  <p class="tm-note">Nothing is loaded from other websites here. Your email address goes to MailerLite, our newsletter service, only when you press Subscribe.</p>
+  <p class="tm-note">You can unsubscribe anytime. For more details, see our <a href="privacy.html">privacy policy</a>. Nothing is loaded from other websites here. Your email address goes to MailerLite, our newsletter service, only when you press Subscribe.</p>
 </div>
 <script>
 function tmSubscribe(f) {
-  // sends the form in the background and shows a thank-you here; without this, the form still works (MailerLite's reply opens in a new tab)
+  // sends the form in the background and then opens the thank-you page; without this, the form still works (MailerLite's reply opens in a new tab)
   if (!window.fetch || !window.URLSearchParams) return true;
   var box = f.parentNode, btn = f.querySelector('button');
   btn.disabled = true;
   fetch(f.action, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(new FormData(f)) })
-    .then(function () { box.innerHTML = '<h4>Thank you!</h4><p>You have successfully joined our subscriber list.</p>'; })
+    .then(function () { window.location.href = 'thank-you.html'; })
     .catch(function () { btn.disabled = false; f.submit(); });
   return false;
 }
